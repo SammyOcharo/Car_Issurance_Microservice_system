@@ -5,4 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
     ResponseEntity<UserDTO> registerUser(UserDTO userDTO);
+
+    ResponseEntity<UserDTO> getUserProfile(Long id);
 }

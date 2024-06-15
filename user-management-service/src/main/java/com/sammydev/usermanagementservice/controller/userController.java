@@ -3,10 +3,7 @@ package com.sammydev.usermanagementservice.controller;
 import com.sammydev.usermanagementservice.UserDTO.UserDTO;
 import com.sammydev.usermanagementservice.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("apps/api/v1/user/")
@@ -21,17 +18,19 @@ public class userController {
     //register user
     @PostMapping("register-user/")
     public ResponseEntity<UserDTO> registerUser(@RequestBody  UserDTO userDTO) {
-
         return userService.registerUser(userDTO);
     }
 
-    //Get user by ID
-
+    //Get user profile
+    @GetMapping("user-{id}-profile/")
+    public ResponseEntity<UserDTO> getUserProfile(@PathVariable Long id) {
+        return userService.getUserProfile(id);
+    }
     //Update user information
 
     //Delete user
 
     //Get all users
 
-    //Get user profile
+
 }

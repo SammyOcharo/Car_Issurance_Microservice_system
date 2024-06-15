@@ -4,6 +4,7 @@ import com.sammydev.usermanagementservice.UserDTO.UserDTO;
 import com.sammydev.usermanagementservice.UserDTO.UserException;
 import com.sammydev.usermanagementservice.customException.EmailIsRequiredException;
 import com.sammydev.usermanagementservice.customException.UserAlreadyExistsException;
+import com.sammydev.usermanagementservice.customException.UserDoesNotExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,6 +30,11 @@ public class GlobalExceptionHandler {
     }
 
 
-
+    @ExceptionHandler(UserDoesNotExistException.class)
+    public ResponseEntity<UserException> handleUserDoesNotExistException(UserDoesNotExistException ex) {
+        userException.setResponseMessage(ex.getMessage());
+        userException.setResponseCode(HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(userException, HttpStatus.BAD_REQUEST);
+    }
 
 }
