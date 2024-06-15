@@ -3,6 +3,7 @@ package com.sammydev.usermanagementservice.service.impl;
 import com.sammydev.usermanagementservice.UserDTO.UserDTO;
 import com.sammydev.usermanagementservice.customException.EmailIsRequiredException;
 import com.sammydev.usermanagementservice.customException.UserAlreadyExistsException;
+import com.sammydev.usermanagementservice.customException.UserDoesNotExistException;
 import com.sammydev.usermanagementservice.entity.UserEntity;
 import com.sammydev.usermanagementservice.repository.UserRepository;
 import com.sammydev.usermanagementservice.service.UserService;
@@ -46,5 +47,26 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserDTO> getUserProfile(Long id) {
+        if(id == null){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+
+        if(!userRepository.existsById(id)){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+        UserEntity userEntity = userRepository.findById(id).get();
+
+        UserDTO userDTO = UserDTO.builder()
+                .firstName(userEntity.getFirstName())
+                .lastName(userEntity.getLastName())
+                .email(userEntity.getEmail())
+                .phone(userEntity.getPhone())
+                .build();
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 }
