@@ -2,6 +2,7 @@ package com.sammydev.usermanagementservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,17 +10,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "user")
-public class userEntity {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false)
-    private String username;
-    private String password;
     private String firstName;
+    @Column(unique = true, nullable = false)
     private String lastName;
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(unique = true, nullable = false)
     private String phone;
 
 }
