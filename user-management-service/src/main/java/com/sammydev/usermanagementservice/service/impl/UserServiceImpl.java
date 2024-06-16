@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -110,5 +112,23 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> userDTO = userRepository.findAll()
+                .stream()
+                .map(this::mapEntityToDto)
+                .toList();
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    private UserDTO mapEntityToDto(UserEntity userEntity) {
+        return UserDTO.builder()
+                .email(userEntity.getEmail())
+                .firstName(userEntity.getFirstName())
+                .lastName(userEntity.getLastName())
+                .phone(userEntity.getPhone())
+                .build();
     }
 }

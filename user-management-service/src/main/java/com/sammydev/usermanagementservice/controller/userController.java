@@ -5,6 +5,8 @@ import com.sammydev.usermanagementservice.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("apps/api/v1/user/")
 public class userController {
@@ -40,6 +42,10 @@ public class userController {
     }
 
     //Get all users
+    @GetMapping("get-all-users/")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return userService.getAllUsers();
+    }
 
 
 }
