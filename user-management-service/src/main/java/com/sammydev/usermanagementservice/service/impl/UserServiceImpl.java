@@ -69,4 +69,46 @@ public class UserServiceImpl implements UserService {
 
         return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<UserDTO> updateUser(UserDTO userDTO, Long id) {
+        if(id == null){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+
+        if(!userRepository.existsById(id)){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+
+        UserEntity userEntity = userRepository.findById(id).get();
+        userEntity.setFirstName(userDTO.getFirstName());
+        userEntity.setLastName(userDTO.getLastName());
+        userEntity.setPhone(userDTO.getPhone());
+
+        userDTO.setResponseCode(200);
+        userDTO.setResponseMessage("User updated successfully");
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserDTO> deleteProfile(Long id) {
+        if(id == null){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+
+        if(!userRepository.existsById(id)){
+            throw new UserDoesNotExistException("User does not exist!");
+        }
+
+        UserEntity userEntity = userRepository.findById(id).get();
+        userRepository.delete(userEntity);
+
+        UserDTO userDTO = UserDTO.builder()
+                .ResponseCode(200)
+                .ResponseMessage("User deleted")
+                .build();
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
 }

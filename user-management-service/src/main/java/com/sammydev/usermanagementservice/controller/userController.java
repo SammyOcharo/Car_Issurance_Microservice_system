@@ -26,9 +26,18 @@ public class userController {
     public ResponseEntity<UserDTO> getUserProfile(@PathVariable Long id) {
         return userService.getUserProfile(id);
     }
+
     //Update user information
+    @PutMapping("update-user/")
+    public ResponseEntity<UserDTO> updateUser(@RequestBody  UserDTO userDTO, @PathVariable Long id) {
+        return userService.updateUser(userDTO, id);
+    }
 
     //Delete user
+    @GetMapping("user-delete-{id}/")
+    public ResponseEntity<UserDTO> deleteProfile(@PathVariable Long id) {
+        return userService.deleteProfile(id);
+    }
 
     //Get all users
 
