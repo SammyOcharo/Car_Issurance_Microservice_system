@@ -5,10 +5,12 @@ import com.sammydev.usermanagementservice.customException.EmailIsRequiredExcepti
 import com.sammydev.usermanagementservice.customException.UserAlreadyExistsException;
 import com.sammydev.usermanagementservice.customException.UserDoesNotExistException;
 import com.sammydev.usermanagementservice.entity.UserEntity;
+import com.sammydev.usermanagementservice.events.UserRegistrationEvent;
 import com.sammydev.usermanagementservice.repository.UserRepository;
 import com.sammydev.usermanagementservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +20,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final KafkaTemplate<String, UserRegistrationEvent> kafkaTemplate;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, KafkaTemplate<String, UserRegistrationEvent> kafkaTemplate) {
         this.userRepository = userRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
@@ -47,6 +51,14 @@ public class UserServiceImpl implements UserService {
                         .ResponseCode(200)
                                 .ResponseMessage("User registered successfully")
                 .build();
+
+        //todo send async event to kafka to contact notification service.
+        // Create and send user registration event
+        UserRegistrationEvent event = new UserRegistrationEvent();
+        event.setEmail(userEntity.getEmail());
+        event.setMessage("Welcome to our car insurance service!");
+
+        kafkaTemplate.send("user-registration", event);
 
         return new ResponseEntity<>(responseObject, HttpStatus.OK);
     }
