@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ClaimController {
 
-    @PostMapping
+    @PostMapping("create-claim/")
     public ResponseEntity<String> createClaim(){
         return ResponseEntity.ok("Claim created");
     }
